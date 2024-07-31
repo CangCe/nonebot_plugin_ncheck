@@ -6,7 +6,6 @@ from httpx import AsyncClient
 from .config import Config
 
 config = get_driver().config
-ip = config.yuapi_ip
 prefix_ = list(config.command_start)
 prefix = str(prefix_[0])
 
@@ -22,25 +21,32 @@ config = get_plugin_config(Config)
 
 
 config = get_driver().config
-ip = config.yuapi_ip
+# ip = config.yuapi_ip
 prefix_ = list(config.command_start)
 prefix = str(prefix_[0])
 YUAPI状态 = on_command("YUAPI状态",  priority=1)
-查直播 = on_command("查直播",  priority=1)
-查场次 = on_command("查场次",  priority=1)
 查成分 = on_command("查成分",  priority=1)
-查藏品 = on_command("查藏品",  priority=1)
-查视频 = on_command("查视频",  priority=1)
-查充电 = on_command("查充电",  priority=1)
-查房管 = on_command("查房管",  priority=1)
-查关注 = on_command("查关注",  priority=1)
-查航海 = on_command("查航海",  priority=1)
 查牌子 = on_command("查牌子",  priority=1)
 查uid牌子 = on_command("查uid牌子",  priority=1)
-查装扮 = on_command("查装扮",  priority=1)
+查视频 = on_command("查视频",  priority=1)
+查房管 = on_command("查房管",  priority=1)
 查粉丝团 = on_command("查粉丝团",  priority=1)
+查藏品 = on_command("查藏品",  priority=1)
+查关注 = on_command("查关注",  priority=1)
+查充电 = on_command("查充电",  priority=1)
+查航海 = on_command("查航海",  priority=1)
+查装扮 = on_command("查装扮",  priority=1)
+查榜单 = on_command("查榜单",  priority=1)
 查房间状态 = on_command("查房间状态",  priority=1)
+
+添加入库 = on_command("查直播",  priority=1)
+删除入库 = on_command("查直播",  priority=1)
+查直播 = on_command("查直播",  priority=1)
+查场次 = on_command("查场次",  priority=1)
 直播列表 = on_command("直播列表",  priority=1)
+# 查盲盒 = on_command("查盲盒",  priority=1)
+# 查盲盒 = on_command("查盲盒",  priority=1)
+# 查盲盒 = on_command("查盲盒",  priority=1)
 YUAPI帮助 = on_command("YUAPI帮助",  priority=1)
 
 
@@ -50,20 +56,137 @@ async def fetch(url: str):
         return response.content
 
 
-@YUAPI状态.handle()
-async def YUAPI状态_handler(bot: Bot, event: Event):
-    qq = str(event.self_id)
-    url = "http://"+ip+":5187/api/SystemInfo/GetSystemInfo?apikey=Ayu&botqq=" + qq
+
+@查成分.handle()
+async def 查成分_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查成分", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliComponent?sign="+args
     image_bytes = await fetch(url)
     await bot.send(event, MessageSegment.image(image_bytes))
-    # await bot.send(event, message = "成功？")
+
+@查牌子.handle()
+async def 查牌子_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查牌子", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliFanscard?type=1&sign="+args
+    print(args)
+    image_bytes = await fetch(url)
+    # await bot.send(event, message = args)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查uid牌子.handle()
+async def 查uid牌子_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查uid牌子", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliFanscard?type=0&sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查视频.handle()
+async def 查视频_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查视频", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliSpacevideo?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查房管.handle()
+async def 查房管_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查房管", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliAnchor?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查粉丝团.handle()
+async def 查粉丝团_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查粉丝团", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliFan?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查藏品.handle()
+async def 查藏品_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查藏品", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliCollection?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查关注.handle()
+async def 查关注_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查关注", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliFollow?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查充电.handle()
+async def 查充电_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查充电", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliBattery?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查航海.handle()
+async def 查航海_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查航海", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliCap?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查装扮.handle()
+async def 查装扮_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查装扮", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliDress?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查榜单.handle()
+async def 查榜单_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查榜单", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliUserRanking?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@查房间状态.handle()
+async def 查房间状态_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "查房间状态", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/Bili/BiliRoomState?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+#----------
+
+@添加入库.handle()
+async def 添加入库_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "添加入库", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/BiliLive/AddTolisteningList?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
+
+@删除入库.handle()
+async def 删除入库_handler(bot: Bot, event: Event):
+    args = str(str(event.get_message()).strip().replace(
+        "删除入库", "").strip(prefix).strip(' '))
+    url = "https://beta.xuemiao.cc/api/BiliLive/RemoveFormlisteningList?sign="+args
+    image_bytes = await fetch(url)
+    await bot.send(event, MessageSegment.image(image_bytes))
 
 
 @查直播.handle()
 async def 查直播_handler(bot: Bot, event: Event):
     args = str(str(event.get_message()).strip().replace(
         "查直播", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/BiliLive/BiliLiveCharts?sign="+args
+    url = "https://beta.xuemiao.cc/api/BiliLive/BiliLiveCharts?sign="+args
     image_bytes = await fetch(url)
     await bot.send(event, MessageSegment.image(image_bytes))
 
@@ -72,130 +195,20 @@ async def 查直播_handler(bot: Bot, event: Event):
 async def 查场次_handler(bot: Bot, event: Event):
     args = str(str(event.get_message()).strip().replace(
         "查场次", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/BiliLive/BiliLiveList?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查成分.handle()
-async def 查成分_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查成分", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliComponent?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查藏品.handle()
-async def 查藏品_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查藏品", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliCollection?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查视频.handle()
-async def 查视频_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查视频", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliSpacevideo?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查充电.handle()
-async def 查充电_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查充电", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliBattery?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查房管.handle()
-async def 查房管_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查房管", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliAnchor?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查关注.handle()
-async def 查关注_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查关注", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliFollow?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查航海.handle()
-async def 查航海_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查航海", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliCap?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查牌子.handle()
-async def 查牌子_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查牌子", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliFanscard?type=1&sign="+args
-    print(args)
-    image_bytes = await fetch(url)
-    # await bot.send(event, message = args)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查uid牌子.handle()
-async def 查uid牌子_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查uid牌子", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliFanscard?type=0&sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查装扮.handle()
-async def 查装扮_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查装扮", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliDress?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查粉丝团.handle()
-async def 查粉丝团_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查粉丝团", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliFan?sign="+args
-    image_bytes = await fetch(url)
-    await bot.send(event, MessageSegment.image(image_bytes))
-
-
-@查房间状态.handle()
-async def 查房间状态_handler(bot: Bot, event: Event):
-    args = str(str(event.get_message()).strip().replace(
-        "查房间状态", "").strip(prefix).strip(' '))
-    url = "http://"+ip+":5187/api/Bili/BiliRoomState?sign="+args
+    url = "https://beta.xuemiao.cc/api/BiliLive/BiliLiveList?sign="+args
     image_bytes = await fetch(url)
     await bot.send(event, MessageSegment.image(image_bytes))
 
 
 @直播列表.handle()
 async def 直播列表_handler(bot: Bot, event: Event):
-    url = "http://"+ip+":5187/api/BiliLive/GetLiveState"
+    url = "https://beta.xuemiao.cc/api/BiliLive/GetLiveState"
     image_bytes = await fetch(url)
     await bot.send(event, MessageSegment.image(image_bytes))
 
 
 @YUAPI帮助.handle()
 async def YUAPI帮助_handler(bot: Bot, event: Event):
-    url = "http://"+ip+":5187/api/Menu/MenuList"
+    url = "https://beta.xuemiao.cc/api/Menu/MenuList"
     image_bytes = await fetch(url)
     await bot.send(event, MessageSegment.image(image_bytes))
